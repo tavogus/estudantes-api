@@ -1,0 +1,290 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "Estudantes API",
+		"description": "API para monitoramento de frequência escolar de alunos de baixa renda e bolsistas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Escolas",
+			"item": [
+				{
+					"name": "Criar Escola",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Escola Municipal São Paulo\",\n    \"endereco\": \"Rua das Flores, 123\",\n    \"telefone\": \"(11) 1234-5678\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/escolas",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "escolas"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Escola por ID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8080/api/escolas/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "escolas", "1"]
+						}
+					}
+				},
+				{
+					"name": "Listar Todas as Escolas",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8080/api/escolas",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "escolas"]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Escola",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Escola Municipal São Paulo Atualizada\",\n    \"endereco\": \"Rua das Flores, 123\",\n    \"telefone\": \"(11) 1234-5678\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/escolas/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "escolas", "1"]
+						}
+					}
+				},
+				{
+					"name": "Deletar Escola",
+					"request": {
+						"method": "DELETE",
+						"url": {
+							"raw": "http://localhost:8080/api/escolas/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "escolas", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Alunos",
+			"item": [
+				{
+					"name": "Criar Aluno",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"João Silva\",\n    \"cpf\": \"12345678901\",\n    \"dataNascimento\": \"2005-01-01\",\n    \"endereco\": \"Rua das Árvores, 456\",\n    \"telefone\": \"(11) 98765-4321\",\n    \"tipoBeneficio\": \"BAIXA_RENDA\",\n    \"escolaId\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/alunos",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "alunos"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Aluno por ID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8080/api/alunos/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "alunos", "1"]
+						}
+					}
+				},
+				{
+					"name": "Listar Alunos por Escola",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8080/api/alunos/escola/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "alunos", "escola", "1"]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Aluno",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"João Silva Atualizado\",\n    \"cpf\": \"12345678901\",\n    \"dataNascimento\": \"2005-01-01\",\n    \"endereco\": \"Rua das Árvores, 456\",\n    \"telefone\": \"(11) 98765-4321\",\n    \"tipoBeneficio\": \"BAIXA_RENDA\",\n    \"escolaId\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/alunos/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "alunos", "1"]
+						}
+					}
+				},
+				{
+					"name": "Deletar Aluno",
+					"request": {
+						"method": "DELETE",
+						"url": {
+							"raw": "http://localhost:8080/api/alunos/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "alunos", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Frequências",
+			"item": [
+				{
+					"name": "Registrar Frequência",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"alunoId\": 1,\n    \"data\": \"2024-03-20\",\n    \"presente\": true,\n    \"observacao\": \"Aluno presente em todas as aulas\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/frequencias",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "frequencias"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Frequências por Aluno",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8080/api/frequencias/aluno/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "frequencias", "aluno", "1"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Frequências por Período",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8080/api/frequencias/aluno/1/periodo?dataInicio=2024-03-01&dataFim=2024-03-31",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "frequencias", "aluno", "1", "periodo"],
+							"query": [
+								{
+									"key": "dataInicio",
+									"value": "2024-03-01"
+								},
+								{
+									"key": "dataFim",
+									"value": "2024-03-31"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Atualizar Frequência",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"presente\": false,\n    \"observacao\": \"Aluno faltou por motivo de saúde\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/frequencias/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "frequencias", "1"]
+						}
+					}
+				},
+				{
+					"name": "Deletar Frequência",
+					"request": {
+						"method": "DELETE",
+						"url": {
+							"raw": "http://localhost:8080/api/frequencias/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "frequencias", "1"]
+						}
+					}
+				}
+			]
+		}
+	]
+} 

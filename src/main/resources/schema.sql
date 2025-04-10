@@ -1,0 +1,33 @@
+CREATE TABLE IF NOT EXISTS escola (
+    id BIGSERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    endereco VARCHAR(200) NOT NULL,
+    telefone VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS aluno (
+    id BIGSERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(11) UNIQUE NOT NULL,
+    data_nascimento DATE NOT NULL,
+    endereco VARCHAR(200) NOT NULL,
+    telefone VARCHAR(20) NOT NULL,
+    tipo_beneficio VARCHAR(20) NOT NULL CHECK (tipo_beneficio IN ('BAIXA_RENDA', 'BOLSISTA')),
+    escola_id BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (escola_id) REFERENCES escola(id)
+);
+
+CREATE TABLE IF NOT EXISTS frequencia (
+    id BIGSERIAL PRIMARY KEY,
+    aluno_id BIGINT NOT NULL,
+    data DATE NOT NULL,
+    presente BOOLEAN NOT NULL,
+    observacao TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (aluno_id) REFERENCES aluno(id)
+); 
