@@ -29,5 +29,7 @@ public record AlunoDTO(
     @NotNull(message = "Tipo de benefício é obrigatório")
     TipoBeneficio tipoBeneficio,
     @NotNull(message = "ID da escola é obrigatório")
-    Long escolaId
+    Long escolaId,
+    @NotNull(message = "Alerta é obrigatório")
+    boolean alerta
 ) {} 

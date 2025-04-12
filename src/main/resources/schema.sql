@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS aluno (
     telefone VARCHAR(20) NOT NULL,
     tipo_beneficio VARCHAR(20) NOT NULL CHECK (tipo_beneficio IN ('BAIXA_RENDA', 'BOLSISTA')),
     escola_id BIGINT NOT NULL,
+    alerta BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (escola_id) REFERENCES escola(id)

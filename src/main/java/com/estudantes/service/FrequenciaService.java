@@ -19,10 +19,12 @@ import jakarta.persistence.EntityNotFoundException;
 public class FrequenciaService {
     private final FrequenciaRepository frequenciaRepository;
     private final AlunoRepository alunoRepository;
+    private final AlunoService alunoService;
 
-    public FrequenciaService(FrequenciaRepository frequenciaRepository, AlunoRepository alunoRepository) {
+    public FrequenciaService(FrequenciaRepository frequenciaRepository, AlunoRepository alunoRepository, AlunoService alunoService) {
         this.frequenciaRepository = frequenciaRepository;
         this.alunoRepository = alunoRepository;
+        this.alunoService = alunoService;
     }
 
     public FrequenciaDTO registrarFrequencia(FrequenciaDTO frequenciaDTO) {
@@ -91,5 +93,29 @@ public class FrequenciaService {
             throw new EntityNotFoundException("Frequência não encontrada com ID: " + id);
         }
         frequenciaRepository.deleteById(id);
+    }
+
+    public boolean verificarAlunoComMaisDe15FaltasNoMes(Long alunoId, LocalDate data) {
+        if (!alunoRepository.existsById(alunoId)) {
+            throw new EntityNotFoundException("Aluno não encontrado com ID: " + alunoId);
+        }
+
+        LocalDate primeiroDiaDoMes = data.withDayOfMonth(1);
+        LocalDate ultimoDiaDoMes = data.withDayOfMonth(data.lengthOfMonth());
+
+        List<Frequencia> frequencias = frequenciaRepository.findByAlunoIdAndDataBetween(alunoId, primeiroDiaDoMes, ultimoDiaDoMes);
+        
+        long totalFaltas = frequencias.stream()
+            .filter(frequencia -> !frequencia.getPresente())
+            .count();
+
+        boolean temMaisDe15Faltas = totalFaltas > 15;
+        
+        // Atualiza o status de alerta do aluno
+        alunoService.atualizarAlertaAluno(alunoId, temMaisDe15Faltas);
+
+        //TODO: criar endpoint para listar alunos que estão em alerta
+
+        return temMaisDe15Faltas;
     }
 } 

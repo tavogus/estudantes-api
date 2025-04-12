@@ -8,6 +8,7 @@ Esta API foi desenvolvida para monitorar a frequência escolar de alunos bolsist
 - Registro de frequência diária
 - Geração de relatórios de frequência por período
 - Acompanhamento individual de cada aluno
+- Verificação de alerta por excesso de faltas
 
 ## Requisitos
 - Java 21
@@ -121,6 +122,11 @@ A aplicação estará disponível em `http://localhost:8080`
 #### Buscar Frequências por Período
 - **GET** `/api/frequencias/aluno/{alunoId}/periodo?dataInicio=2024-03-01&dataFim=2024-03-31`
 
+#### Verificar Alerta de Faltas
+- **GET** `/api/frequencias/aluno/{alunoId}/verificar-faltas?data=2024-03-20`
+- **Response**: Retorna `true` se o aluno tiver mais de 15 faltas no mês, `false` caso contrário
+- **Observação**: Este endpoint também atualiza automaticamente o campo `alerta` do aluno
+
 #### Atualizar Frequência
 - **PUT** `/api/frequencias/{id}`
 - **Body**:
@@ -153,6 +159,7 @@ Você pode importar a collection do Postman localizada em `postman/estudantes-ap
 2. Cadastre os alunos (indicando se são bolsistas ou de baixa renda)
 3. Registre a frequência diária dos alunos
 4. Consulte os relatórios de frequência por aluno ou por período
+5. Verifique o status de alerta de faltas dos alunos
 
 ## Validações
 
@@ -160,4 +167,5 @@ Você pode importar a collection do Postman localizada em `postman/estudantes-ap
 - Data de nascimento deve ser no passado
 - Tipo de benefício deve ser "BAIXA_RENDA" ou "BOLSISTA"
 - Campos obrigatórios são validados
-- Relacionamentos entre entidades são mantidos (aluno pertence a uma escola, frequência pertence a um aluno) 
+- Relacionamentos entre entidades são mantidos (aluno pertence a uma escola, frequência pertence a um aluno)
+- Alerta é atualizado automaticamente quando um aluno tem mais de 15 faltas no mês 

@@ -60,4 +60,12 @@ public class FrequenciaController {
         frequenciaService.deletarFrequencia(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/aluno/{alunoId}/verificar-faltas")
+    public ResponseEntity<Boolean> verificarAlunoComMaisDe15FaltasNoMes(
+            @PathVariable Long alunoId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data) {
+        boolean temMaisDe15Faltas = frequenciaService.verificarAlunoComMaisDe15FaltasNoMes(alunoId, data);
+        return ResponseEntity.ok(temMaisDe15Faltas);
+    }
 } 

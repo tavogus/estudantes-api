@@ -40,47 +40,21 @@ public class AlunoService {
         aluno.setTelefone(alunoDTO.telefone());
         aluno.setTipoBeneficio(alunoDTO.tipoBeneficio());
         aluno.setEscola(escola);
+        aluno.setAlerta(false);
 
         aluno = alunoRepository.save(aluno);
-        return new AlunoDTO(
-            aluno.getId(),
-            aluno.getNome(),
-            aluno.getCpf(),
-            aluno.getDataNascimento(),
-            aluno.getEndereco(),
-            aluno.getTelefone(),
-            aluno.getTipoBeneficio(),
-            aluno.getEscola().getId()
-        );
+        return toDTO(aluno);
     }
 
     public AlunoDTO buscarAlunoPorId(Long id) {
         Aluno aluno = alunoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado com ID: " + id));
-        return new AlunoDTO(
-            aluno.getId(),
-            aluno.getNome(),
-            aluno.getCpf(),
-            aluno.getDataNascimento(),
-            aluno.getEndereco(),
-            aluno.getTelefone(),
-            aluno.getTipoBeneficio(),
-            aluno.getEscola().getId()
-        );
+        return toDTO(aluno);
     }
 
     public List<AlunoDTO> listarAlunosPorEscola(Long escolaId) {
         return alunoRepository.findByEscolaId(escolaId).stream()
-                .map(aluno -> new AlunoDTO(
-                    aluno.getId(),
-                    aluno.getNome(),
-                    aluno.getCpf(),
-                    aluno.getDataNascimento(),
-                    aluno.getEndereco(),
-                    aluno.getTelefone(),
-                    aluno.getTipoBeneficio(),
-                    aluno.getEscola().getId()
-                ))
+                .map(this::toDTO)
                 .toList();
     }
 
@@ -100,6 +74,25 @@ public class AlunoService {
         aluno.setEscola(escola);
 
         aluno = alunoRepository.save(aluno);
+        return toDTO(aluno);
+    }
+
+    public void deletarAluno(Long id) {
+        if (!alunoRepository.existsById(id)) {
+            throw new EntityNotFoundException("Aluno não encontrado com ID: " + id);
+        }
+        alunoRepository.deleteById(id);
+    }
+
+    public void atualizarAlertaAluno(Long alunoId, boolean alerta) {
+        Aluno aluno = alunoRepository.findById(alunoId)
+                .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado com ID: " + alunoId));
+        
+        aluno.setAlerta(alerta);
+        alunoRepository.save(aluno);
+    }
+
+    private AlunoDTO toDTO(Aluno aluno) {
         return new AlunoDTO(
             aluno.getId(),
             aluno.getNome(),
@@ -108,14 +101,8 @@ public class AlunoService {
             aluno.getEndereco(),
             aluno.getTelefone(),
             aluno.getTipoBeneficio(),
-            aluno.getEscola().getId()
+            aluno.getEscola().getId(),
+            aluno.isAlerta()
         );
-    }
-
-    public void deletarAluno(Long id) {
-        if (!alunoRepository.existsById(id)) {
-            throw new EntityNotFoundException("Aluno não encontrado com ID: " + id);
-        }
-        alunoRepository.deleteById(id);
     }
 } 

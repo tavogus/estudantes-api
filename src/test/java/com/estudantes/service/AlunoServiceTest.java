@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -60,6 +61,7 @@ class AlunoServiceTest {
         aluno.setTelefone("11999999999");
         aluno.setTipoBeneficio(TipoBeneficio.BOLSISTA);
         aluno.setEscola(escola);
+        aluno.setAlerta(false);
 
         alunoDTO = new AlunoDTO(
             1L,
@@ -69,7 +71,8 @@ class AlunoServiceTest {
             "Rua Teste, 123",
             "11999999999",
             TipoBeneficio.BOLSISTA,
-            1L
+            1L,
+            false
         );
     }
 
@@ -85,6 +88,7 @@ class AlunoServiceTest {
         assertEquals(alunoDTO.id(), result.id());
         assertEquals(alunoDTO.nome(), result.nome());
         assertEquals(alunoDTO.cpf(), result.cpf());
+        assertEquals(alunoDTO.alerta(), result.alerta());
         verify(alunoRepository).save(any(Aluno.class));
     }
 
@@ -106,6 +110,7 @@ class AlunoServiceTest {
         assertNotNull(result);
         assertEquals(alunoDTO.id(), result.id());
         assertEquals(alunoDTO.nome(), result.nome());
+        assertEquals(alunoDTO.alerta(), result.alerta());
     }
 
     @Test
@@ -127,6 +132,7 @@ class AlunoServiceTest {
         assertFalse(result.isEmpty());
         assertEquals(1, result.size());
         assertEquals(alunoDTO.id(), result.get(0).id());
+        assertEquals(alunoDTO.alerta(), result.get(0).alerta());
     }
 
     @Test
@@ -140,7 +146,28 @@ class AlunoServiceTest {
         assertNotNull(result);
         assertEquals(alunoDTO.id(), result.id());
         assertEquals(alunoDTO.nome(), result.nome());
+        assertEquals(alunoDTO.alerta(), result.alerta());
         verify(alunoRepository).save(any(Aluno.class));
+    }
+
+    @Test
+    void atualizarAlertaAluno_DeveAtualizarAlerta_QuandoAlunoExiste() {
+        when(alunoRepository.findById(1L)).thenReturn(Optional.of(aluno));
+        when(alunoRepository.save(any(Aluno.class))).thenReturn(aluno);
+
+        alunoService.atualizarAlertaAluno(1L, true);
+
+        assertTrue(aluno.isAlerta());
+        verify(alunoRepository).save(aluno);
+    }
+
+    @Test
+    void atualizarAlertaAluno_DeveLancarExcecao_QuandoAlunoNaoExiste() {
+        when(alunoRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> {
+            alunoService.atualizarAlertaAluno(1L, true);
+        });
     }
 
     @Test

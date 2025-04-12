@@ -62,6 +62,9 @@ public class Aluno {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(nullable = false)
+    private boolean alerta;
+
     public Aluno() {
     }
 
@@ -151,6 +154,14 @@ public class Aluno {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public boolean isAlerta() {
+        return alerta;
+    }
+
+    public void setAlerta(boolean alerta) {
+        this.alerta = alerta;
     }
 
     @Override

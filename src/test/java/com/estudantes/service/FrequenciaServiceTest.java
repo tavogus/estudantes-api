@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,6 +38,9 @@ class FrequenciaServiceTest {
     @Mock
     private AlunoRepository alunoRepository;
 
+    @Mock
+    private AlunoService alunoService;
+
     @InjectMocks
     private FrequenciaService frequenciaService;
 
@@ -49,6 +53,7 @@ class FrequenciaServiceTest {
         aluno = new Aluno();
         aluno.setId(1L);
         aluno.setNome("João Silva");
+        aluno.setAlerta(false);
 
         frequencia = new Frequencia();
         frequencia.setId(1L);
@@ -167,5 +172,77 @@ class FrequenciaServiceTest {
         assertThrows(EntityNotFoundException.class, () -> {
             frequenciaService.deletarFrequencia(1L);
         });
+    }
+
+    @Test
+    void verificarAlunoComMaisDe15FaltasNoMes_DeveRetornarTrueEAtualizarAlerta_QuandoTemMaisDe15Faltas() {
+        LocalDate data = LocalDate.of(2024, 3, 20);
+        LocalDate primeiroDiaDoMes = data.withDayOfMonth(1);
+        LocalDate ultimoDiaDoMes = data.withDayOfMonth(data.lengthOfMonth());
+
+        when(alunoRepository.existsById(1L)).thenReturn(true);
+        
+        // Criando 16 frequências com presente = false (faltas)
+        List<Frequencia> frequencias = List.of(
+            createFrequencia(false), createFrequencia(false), createFrequencia(false),
+            createFrequencia(false), createFrequencia(false), createFrequencia(false),
+            createFrequencia(false), createFrequencia(false), createFrequencia(false),
+            createFrequencia(false), createFrequencia(false), createFrequencia(false),
+            createFrequencia(false), createFrequencia(false), createFrequencia(false),
+            createFrequencia(false)
+        );
+        
+        when(frequenciaRepository.findByAlunoIdAndDataBetween(1L, primeiroDiaDoMes, ultimoDiaDoMes))
+            .thenReturn(frequencias);
+
+        boolean result = frequenciaService.verificarAlunoComMaisDe15FaltasNoMes(1L, data);
+
+        assertTrue(result);
+        verify(alunoService).atualizarAlertaAluno(1L, true);
+    }
+
+    @Test
+    void verificarAlunoComMaisDe15FaltasNoMes_DeveRetornarFalseEAtualizarAlerta_QuandoTemMenosDe15Faltas() {
+        LocalDate data = LocalDate.of(2024, 3, 20);
+        LocalDate primeiroDiaDoMes = data.withDayOfMonth(1);
+        LocalDate ultimoDiaDoMes = data.withDayOfMonth(data.lengthOfMonth());
+
+        when(alunoRepository.existsById(1L)).thenReturn(true);
+        
+        // Criando 10 frequências com presente = false (faltas)
+        List<Frequencia> frequencias = List.of(
+            createFrequencia(false), createFrequencia(false), createFrequencia(false),
+            createFrequencia(false), createFrequencia(false), createFrequencia(false),
+            createFrequencia(false), createFrequencia(false), createFrequencia(false),
+            createFrequencia(false)
+        );
+        
+        when(frequenciaRepository.findByAlunoIdAndDataBetween(1L, primeiroDiaDoMes, ultimoDiaDoMes))
+            .thenReturn(frequencias);
+
+        boolean result = frequenciaService.verificarAlunoComMaisDe15FaltasNoMes(1L, data);
+
+        assertFalse(result);
+        verify(alunoService).atualizarAlertaAluno(1L, false);
+    }
+
+    @Test
+    void verificarAlunoComMaisDe15FaltasNoMes_DeveLancarExcecao_QuandoAlunoNaoExiste() {
+        LocalDate data = LocalDate.of(2024, 3, 20);
+        
+        when(alunoRepository.existsById(1L)).thenReturn(false);
+
+        assertThrows(EntityNotFoundException.class, () -> {
+            frequenciaService.verificarAlunoComMaisDe15FaltasNoMes(1L, data);
+        });
+    }
+
+    private Frequencia createFrequencia(boolean presente) {
+        Frequencia frequencia = new Frequencia();
+        frequencia.setAluno(aluno);
+        frequencia.setData(LocalDate.of(2024, 3, 20));
+        frequencia.setPresente(presente);
+        frequencia.setObservacao(presente ? "Aluno presente" : "Aluno ausente");
+        return frequencia;
     }
 } 
