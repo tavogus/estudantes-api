@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.estudantes.dto.AlunoDTO;
 import com.estudantes.entity.Aluno;
+import com.estudantes.entity.Aluno.TipoBeneficio;
 import com.estudantes.entity.Escola;
 import com.estudantes.repository.AlunoRepository;
 import com.estudantes.repository.EscolaRepository;
@@ -52,8 +53,8 @@ public class AlunoService {
         return toDTO(aluno);
     }
 
-    public List<AlunoDTO> listarAlunosPorEscola(Long escolaId) {
-        return alunoRepository.findByEscolaId(escolaId).stream()
+    public List<AlunoDTO> listarAlunosPorEscola(Long escolaId, String nome, String cpf, TipoBeneficio tipoBeneficio) {
+        return alunoRepository.findByEscolaIdAndFilters(escolaId, nome, cpf, tipoBeneficio).stream()
                 .map(this::toDTO)
                 .toList();
     }

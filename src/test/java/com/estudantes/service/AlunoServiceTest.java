@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.doNothing;
@@ -123,16 +124,76 @@ class AlunoServiceTest {
     }
 
     @Test
-    void listarAlunosPorEscola_DeveRetornarListaDeAlunos() {
-        when(alunoRepository.findByEscolaId(1L)).thenReturn(List.of(aluno));
+    void listarAlunosPorEscola_DeveRetornarListaDeAlunos_SemFiltros() {
+        when(alunoRepository.findByEscolaIdAndFilters(eq(1L), eq(null), eq(null), eq(null)))
+            .thenReturn(List.of(aluno));
 
-        List<AlunoDTO> result = alunoService.listarAlunosPorEscola(1L);
+        List<AlunoDTO> result = alunoService.listarAlunosPorEscola(1L, null, null, null);
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
         assertEquals(1, result.size());
         assertEquals(alunoDTO.id(), result.get(0).id());
+        assertEquals(alunoDTO.nome(), result.get(0).nome());
         assertEquals(alunoDTO.alerta(), result.get(0).alerta());
+    }
+
+    @Test
+    void listarAlunosPorEscola_DeveRetornarListaDeAlunos_ComFiltroNome() {
+        when(alunoRepository.findByEscolaIdAndFilters(eq(1L), eq("joao"), eq(null), eq(null)))
+            .thenReturn(List.of(aluno));
+
+        List<AlunoDTO> result = alunoService.listarAlunosPorEscola(1L, "joao", null, null);
+
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        assertEquals(1, result.size());
+        assertEquals(alunoDTO.id(), result.get(0).id());
+        assertEquals(alunoDTO.nome(), result.get(0).nome());
+    }
+
+    @Test
+    void listarAlunosPorEscola_DeveRetornarListaDeAlunos_ComFiltroCPF() {
+        when(alunoRepository.findByEscolaIdAndFilters(eq(1L), eq(null), eq("123"), eq(null)))
+            .thenReturn(List.of(aluno));
+
+        List<AlunoDTO> result = alunoService.listarAlunosPorEscola(1L, null, "123", null);
+
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        assertEquals(1, result.size());
+        assertEquals(alunoDTO.id(), result.get(0).id());
+        assertEquals(alunoDTO.cpf(), result.get(0).cpf());
+    }
+
+    @Test
+    void listarAlunosPorEscola_DeveRetornarListaDeAlunos_ComFiltroTipoBeneficio() {
+        when(alunoRepository.findByEscolaIdAndFilters(eq(1L), eq(null), eq(null), eq(TipoBeneficio.BOLSISTA)))
+            .thenReturn(List.of(aluno));
+
+        List<AlunoDTO> result = alunoService.listarAlunosPorEscola(1L, null, null, TipoBeneficio.BOLSISTA);
+
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        assertEquals(1, result.size());
+        assertEquals(alunoDTO.id(), result.get(0).id());
+        assertEquals(alunoDTO.tipoBeneficio(), result.get(0).tipoBeneficio());
+    }
+
+    @Test
+    void listarAlunosPorEscola_DeveRetornarListaDeAlunos_ComTodosFiltros() {
+        when(alunoRepository.findByEscolaIdAndFilters(eq(1L), eq("joao"), eq("123"), eq(TipoBeneficio.BOLSISTA)))
+            .thenReturn(List.of(aluno));
+
+        List<AlunoDTO> result = alunoService.listarAlunosPorEscola(1L, "joao", "123", TipoBeneficio.BOLSISTA);
+
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        assertEquals(1, result.size());
+        assertEquals(alunoDTO.id(), result.get(0).id());
+        assertEquals(alunoDTO.nome(), result.get(0).nome());
+        assertEquals(alunoDTO.cpf(), result.get(0).cpf());
+        assertEquals(alunoDTO.tipoBeneficio(), result.get(0).tipoBeneficio());
     }
 
     @Test

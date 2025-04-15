@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.doNothing;
@@ -90,16 +91,35 @@ class EscolaServiceTest {
     }
 
     @Test
-    void listarEscolas_DeveRetornarListaDeEscolas() {
-        when(escolaRepository.findAll()).thenReturn(List.of(escola));
+    void listarEscolas_DeveRetornarListaDeEscolas_SemFiltro() {
+        when(escolaRepository.findByNomeContainingIgnoreCase(eq(null)))
+            .thenReturn(List.of(escola));
 
-        List<EscolaDTO> result = escolaService.listarEscolas();
+        List<EscolaDTO> result = escolaService.listarEscolas(null);
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
         assertEquals(1, result.size());
         assertEquals(escolaDTO.id(), result.get(0).id());
         assertEquals(escolaDTO.nome(), result.get(0).nome());
+        assertEquals(escolaDTO.endereco(), result.get(0).endereco());
+        assertEquals(escolaDTO.telefone(), result.get(0).telefone());
+    }
+
+    @Test
+    void listarEscolas_DeveRetornarListaDeEscolas_ComFiltroNome() {
+        when(escolaRepository.findByNomeContainingIgnoreCase(eq("municipal")))
+            .thenReturn(List.of(escola));
+
+        List<EscolaDTO> result = escolaService.listarEscolas("municipal");
+
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        assertEquals(1, result.size());
+        assertEquals(escolaDTO.id(), result.get(0).id());
+        assertEquals(escolaDTO.nome(), result.get(0).nome());
+        assertEquals(escolaDTO.endereco(), result.get(0).endereco());
+        assertEquals(escolaDTO.telefone(), result.get(0).telefone());
     }
 
     @Test

@@ -36,8 +36,8 @@ public class EscolaService {
         return new EscolaDTO(escola.getId(), escola.getNome(), escola.getEndereco(), escola.getTelefone());
     }
 
-    public List<EscolaDTO> listarEscolas() {
-        return escolaRepository.findAll().stream()
+    public List<EscolaDTO> listarEscolas(String nome) {
+        return escolaRepository.findByNomeContainingIgnoreCase(nome).stream()
                 .map(escola -> new EscolaDTO(escola.getId(), escola.getNome(), escola.getEndereco(), escola.getTelefone()))
                 .toList();
     }
