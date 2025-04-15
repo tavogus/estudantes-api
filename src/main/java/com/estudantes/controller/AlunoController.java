@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.estudantes.dto.AlunoDTO;
+import com.estudantes.entity.Aluno.TipoBeneficio;
 import com.estudantes.service.AlunoService;
 
 import jakarta.validation.Valid;
@@ -38,8 +40,12 @@ public class AlunoController {
     }
 
     @GetMapping("/escola/{escolaId}")
-    public ResponseEntity<List<AlunoDTO>> listarAlunosPorEscola(@PathVariable Long escolaId) {
-        return ResponseEntity.ok(alunoService.listarAlunosPorEscola(escolaId));
+    public ResponseEntity<List<AlunoDTO>> listarAlunosPorEscola(
+            @PathVariable Long escolaId,
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) String cpf,
+            @RequestParam(required = false) TipoBeneficio tipoBeneficio) {
+        return ResponseEntity.ok(alunoService.listarAlunosPorEscola(escolaId, nome, cpf, tipoBeneficio));
     }
 
     @PutMapping("/{id}")

@@ -57,6 +57,9 @@ A aplicação estará disponível em `http://localhost:8080`
 
 #### Listar Todas as Escolas
 - **GET** `/api/escolas`
+- **Query Parameters**:
+  - `nome`: (opcional) Filtra escolas por nome (case-insensitive)
+- **Exemplo**: `/api/escolas?nome=São Paulo`
 
 #### Atualizar Escola
 - **PUT** `/api/escolas/{id}`
@@ -94,6 +97,11 @@ A aplicação estará disponível em `http://localhost:8080`
 
 #### Listar Alunos por Escola
 - **GET** `/api/alunos/escola/{escolaId}`
+- **Query Parameters**:
+  - `nome`: (opcional) Filtra alunos por nome (case-insensitive)
+  - `cpf`: (opcional) Filtra alunos por CPF
+  - `tipoBeneficio`: (opcional) Filtra alunos por tipo de benefício (BAIXA_RENDA ou BOLSISTA)
+- **Exemplo**: `/api/alunos/escola/1?nome=João&tipoBeneficio=BAIXA_RENDA`
 
 #### Atualizar Aluno
 - **PUT** `/api/alunos/{id}`
@@ -168,4 +176,23 @@ Você pode importar a collection do Postman localizada em `postman/estudantes-ap
 - Tipo de benefício deve ser "BAIXA_RENDA" ou "BOLSISTA"
 - Campos obrigatórios são validados
 - Relacionamentos entre entidades são mantidos (aluno pertence a uma escola, frequência pertence a um aluno)
-- Alerta é atualizado automaticamente quando um aluno tem mais de 15 faltas no mês 
+- Alerta é atualizado automaticamente quando um aluno tem mais de 15 faltas no mês
+
+## Buscas e Filtros
+
+A API implementa buscas flexíveis com as seguintes características:
+
+- **Escolas**:
+  - Busca por nome (case-insensitive)
+  - Suporte a busca parcial (ex: "São" encontra "São Paulo")
+  - Parâmetro opcional (retorna todas as escolas se não especificado)
+
+- **Alunos**:
+  - Busca por nome (case-insensitive)
+  - Busca por CPF
+  - Filtro por tipo de benefício
+  - Todos os parâmetros são opcionais
+  - Combinação de filtros suportada
+  - Busca por escola obrigatória
+
+As buscas são otimizadas para PostgreSQL e utilizam queries parametrizadas para segurança e performance. 
