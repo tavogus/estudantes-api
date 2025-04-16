@@ -53,6 +53,12 @@ public class AlunoService {
         return toDTO(aluno);
     }
 
+    public List<AlunoDTO> listarAlunos() {
+        return alunoRepository.findAll().stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
     public List<AlunoDTO> listarAlunosPorEscola(Long escolaId, String nome, String cpf, TipoBeneficio tipoBeneficio) {
         return alunoRepository.findByEscolaIdAndFilters(escolaId, nome, cpf, tipoBeneficio).stream()
                 .map(this::toDTO)

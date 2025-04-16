@@ -95,6 +95,10 @@ A aplicação estará disponível em `http://localhost:8080`
 #### Buscar Aluno por ID
 - **GET** `/api/alunos/{id}`
 
+#### Listar Todos os Alunos
+- **GET** `/api/alunos`
+- **Response**: Lista de todos os alunos cadastrados no sistema
+
 #### Listar Alunos por Escola
 - **GET** `/api/alunos/escola/{escolaId}`
 - **Query Parameters**:
@@ -128,7 +132,11 @@ A aplicação estará disponível em `http://localhost:8080`
 - **GET** `/api/frequencias/aluno/{alunoId}`
 
 #### Buscar Frequências por Período
-- **GET** `/api/frequencias/aluno/{alunoId}/periodo?dataInicio=2024-03-01&dataFim=2024-03-31`
+- **GET** `/api/frequencias/aluno/periodo?alunoId=1&dataInicio=2024-03-01&dataFim=2024-03-31`
+- **Query Parameters**:
+  - `alunoId`: ID do aluno
+  - `dataInicio`: Data inicial do período (formato: YYYY-MM-DD)
+  - `dataFim`: Data final do período (formato: YYYY-MM-DD)
 
 #### Verificar Alerta de Faltas
 - **GET** `/api/frequencias/aluno/{alunoId}/verificar-faltas?data=2024-03-20`
