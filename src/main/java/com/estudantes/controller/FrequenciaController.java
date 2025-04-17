@@ -42,7 +42,7 @@ public class FrequenciaController {
 
     @GetMapping("/aluno/periodo")
     public ResponseEntity<List<FrequenciaDTO>> buscarFrequenciasPorPeriodo(
-            @RequestParam Long alunoId,
+            @RequestParam(required = false) Long alunoId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim) {
         return ResponseEntity.ok(frequenciaService.buscarFrequenciasPorPeriodo(alunoId, dataInicio, dataFim));

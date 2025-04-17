@@ -132,11 +132,14 @@ A aplicação estará disponível em `http://localhost:8080`
 - **GET** `/api/frequencias/aluno/{alunoId}`
 
 #### Buscar Frequências por Período
-- **GET** `/api/frequencias/aluno/periodo?alunoId=1&dataInicio=2024-03-01&dataFim=2024-03-31`
+- **GET** `/api/frequencias/aluno/periodo?dataInicio=2024-03-01&dataFim=2024-03-31`
 - **Query Parameters**:
-  - `alunoId`: ID do aluno
+  - `alunoId`: (opcional) ID do aluno para filtrar frequências
   - `dataInicio`: Data inicial do período (formato: YYYY-MM-DD)
   - `dataFim`: Data final do período (formato: YYYY-MM-DD)
+- **Exemplo**: 
+  - Buscar todas as frequências: `/api/frequencias/aluno/periodo?dataInicio=2024-03-01&dataFim=2024-03-31`
+  - Buscar frequências de um aluno: `/api/frequencias/aluno/periodo?alunoId=1&dataInicio=2024-03-01&dataFim=2024-03-31`
 
 #### Verificar Alerta de Faltas
 - **GET** `/api/frequencias/aluno/{alunoId}/verificar-faltas?data=2024-03-20`
